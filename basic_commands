@@ -1,0 +1,7 @@
+
+1 - Access PostgreSQL: Option One 
+1.0 >>> sudo -i -u postgres 
+1.1 >>> psql 
+
+2 - Access PostgreSQL: Option Two 
+2.1 >>> sudo -u postgres psql (direct access to postgres prompt)
