@@ -6,4 +6,6 @@
 * RubyGems: 3.1.2v
 * Rails: 6.1.4.1v
 * Bundle / Ruby-bundler: 2.1.2v
+* npm: 6.14.4v
+* yarn: 
 * PostgreSQL: psql (PostgreSQL) 12.9v (Ubuntu 12.9-0ubuntu0.20.04.1)

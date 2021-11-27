@@ -5,7 +5,7 @@ ruby '2.7.0'
 
 # install postgres adapater for rails
 
-gem 'pg'
+gem 'pg', '~> 1.2', '>= 1.2.3'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
