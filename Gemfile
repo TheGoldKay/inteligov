@@ -7,6 +7,10 @@ ruby '2.7.0'
 
 gem 'pg', '~> 1.2', '>= 1.2.3'
 
+gem 'pry' #debugging tool
+gem 'nokogiri' #parsing gem
+gem 'httparty' #HTTP request gem
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
 # Use Puma as the app server
