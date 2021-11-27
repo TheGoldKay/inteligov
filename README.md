@@ -7,5 +7,6 @@
 * Rails: 6.1.4.1v
 * Bundle / Ruby-bundler: 2.1.2v
 * npm: 6.14.4v
-* yarn: 
+* yarn: 1.22.17v
+* webpack: 4.46.0v
 * PostgreSQL: psql (PostgreSQL) 12.9v (Ubuntu 12.9-0ubuntu0.20.04.1)
