@@ -10,6 +10,10 @@ gem 'pg', '~> 1.2', '>= 1.2.3'
 gem 'pry' #debugging tool
 gem 'nokogiri' #parsing gem
 gem 'httparty' #HTTP request gem
+gem 'json' # handling some jason (parsing)
+gem 'set'
+gem 'csv'
+gem 'resolv-replace'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
 gem 'rails', '~> 6.1.4', '>= 6.1.4.1'
