@@ -1,26 +1,28 @@
 
 require 'resolv-replace'
 
-if not File.exist?('ids.csv') then 
+if not File.exist?("data/ids.csv") then 
     system 'ruby scraper/get_bill_ids.rb'
 end 
 
 
 
-def main 
-    number_of_bills = File.open("total_number_of_bills.txt", "r")
-    count = Dir.glob(File.join("bill_pdf_odt_files", '**', '*')).select { |file| File.file?(file) }.count
-    if count.to_i == number_of_bills.to_i then 
-        return 
-    end
+def main reset = "yes" 
     begin 
-        system "ruby scraper/download.rb"
-    rescue 
-        count = Dir.glob(File.join("bill_pdf_odt_files", '**', '*')).select { |file| File.file?(file) }.count
-        if count.to_i != number_of_bills.to_i then 
-            return main() 
+        if reset == "yes"
+            File.delete("data/ids.csv") if File.exist?("data/ids.csv")
+            File.delete("data/total_number_of_bills.txt") if File.exist?("data/total_number_of_bills.txt")
+            system "ruby scraper/get_bill_ids.rb"
+            system "ruby scraper/download.rb"
+        else
+            system "ruby scraper/download.rb"
         end 
+    rescue => e
+        puts e.message 
+        puts e.backtrace 
     end 
 end 
 
-main()
+reset_everything = ARGV[0]
+
+main(reset_everything)
