@@ -7,7 +7,7 @@ end
 
 
 
-def main reset = "yes" 
+def main reset = "no"#"yes" 
     begin 
         if reset == "yes"
             File.delete("data/ids.csv") if File.exist?("data/ids.csv")
