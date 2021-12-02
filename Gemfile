@@ -5,8 +5,8 @@ ruby '2.7.0'
 
 # install postgres adapater for rails
 
-gem 'pg', '~> 1.2', '>= 1.2.3'
-
+gem 'pg'
+gem 'coderay'
 gem 'pry' #debugging tool
 gem 'nokogiri' #parsing gem
 gem 'httparty' #HTTP request gem

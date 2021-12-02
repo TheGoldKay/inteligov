@@ -58,7 +58,6 @@ end
 
 
 def download bill_url, url_site_base 
-    #all_bill_numbers.each do |num| 
     num_bills = Dir.glob(File.join("bills_json_data/", '**', '*')).select { |file| File.file?(file) }.count
     max_bill_index = File.open("data/total_number_of_bills.txt", "r").to_i
     while codes_left do 
@@ -69,8 +68,6 @@ def download bill_url, url_site_base
         puts "\t\t\t\t\t|\t\t\t\t\t\t\t\t\t\t|"
         puts "\t\t\t\t\tCurrent Bill Code/Number: #{num} <!> Bill Count: #{num_bills} <!> ON: #{c['ON']} <!> OFF: #{c['OFF']}"
         puts "\t\t\t\t\t|\t\t\t\t\t\t\t\t\t\t|"
-        #num = all_bill_numbers[bill_index]
-        #puts num
         url = bill_url + num.to_s.strip
         doc = Nokogiri::HTML(URI.open(url))
         bill_name = doc.search("h1").text.strip
@@ -80,40 +77,18 @@ def download bill_url, url_site_base
         bill_date = doc.at_css("div#div_id_data_apresentacao").text.strip
         data_arr = bill_date.split("\n")
         bill_date = data_arr[data_arr.length() - 1].strip
-        #print "Bill's Name: #{bill_name}"
-        #puts 
-        #print "Bill's Ementa: #{bill_ementa}"
-        #puts 
         file_name = doc.at_css("div#div_id_texto_original").at_css('div').at_css('div').text
         file_path = doc.at_css("div#div_id_texto_original").at_css('div').at_css('div').at_css('a')['href']
         file_path = url_site_base + file_path     
-        #print "Bill's Original Text: #{file_path}" 
-        #puts     
-        #print "Bill's Data: #{bill_date}"
-        #puts
         authors = Nokogiri::HTML(URI.open(url+"/autoria"))
         a_list = authors.css('tbody').css('td').css('a').map { |author| author.text.strip}
-        #puts "List Of Authors: #{a_list}"
-
         bill_status = Nokogiri::HTML(URI.open(url + "/tramitacao"))
-        s_list = bill_status.css('tbody').css('tr').map{|item| item.text}#.map {|item| item.css('td').text.split("\n").to_a.map{|i| i.gsub! " ", ""}.delete_if{|i| i == "" or i == nil}}
+        s_list = bill_status.css('tbody').css('tr').map{|item| item.text}
         lists = []
         s_list.each do |item|
             list = item.split("\n").map{|i| i.strip}.delete_if{|j| j == "" or j == nil}
             lists.append(list)
-            #print list, list.length()
-            #puts
         end 
-        #print lists 
-        #puts 
-        #puts "STATUS: #{lists}"
-
-        #bill_status.css('tbody').each do |x| 
-        #    puts x.css('td').text.strip.split("\n").to_a.map{|item| item.strip.split('\n')}
-        #end 
-        #puts "Status List: #{s_list}"
-
-        #puts "<<<<<--------------------------------------------------------------------->>>>>" 
         status_json_lists = []
         lists.each do |l| 
             status_json = {
@@ -133,9 +108,6 @@ def download bill_url, url_site_base
             "authors" => a_list,
             "status" => status_json_lists
         }
-        #puts "         <<<<<------------------------------------------------------------------------>>>>>" 
-        #puts JSON.pretty_generate(actual_bill)
-        #puts "         <<<<<------------------------------------------------------------------------>>>>>" 
         json_name = file_name.split(".")[0]
         File.open("bills_json_data/" + json_name + ".json", "w") do |f|
             f.write(actual_bill.to_json)

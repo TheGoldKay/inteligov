@@ -1,3 +1,3 @@
-class ApplicationRecord < ActiveRecord::Base
+class Inteligov < ActiveRecord::Base
   self.abstract_class = true
 end

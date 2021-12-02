@@ -7,10 +7,10 @@ development:
   username: jhonnatan
   password: 'kakaroto#123#'
 
-test:
+production:
   adapter: postgresql
   encoding: unicode
-  database: inteligov_test
+  database: inteligov_prod
   host: localhost
   pool: 5
   username: jhonnatan
