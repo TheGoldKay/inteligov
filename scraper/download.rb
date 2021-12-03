@@ -99,6 +99,7 @@ def download bill_url, url_site_base
             }
             status_json_lists.append(status_json)
         end 
+=begin
         actual_bill = {
             "id" => num,
             "name" => bill_name,
@@ -112,7 +113,27 @@ def download bill_url, url_site_base
         File.open("bills_json_data/" + json_name + ".json", "w") do |f|
             f.write(actual_bill.to_json)
         end 
+=end
+        a_list_json = {}
+        a_list.each_with_index do |val, index|
+            a_list_json[index.to_s] = val 
+        end 
+        s_list_json = {}
+        status_json_lists.each_with_index do |val, index|
+            s_list_json[index.to_s] = val 
+        end 
         num_bills = Dir.glob(File.join("bills_json_data/", '**', '*')).select { |file| File.file?(file) }.count
+        bill = Bill.new({
+            code: num,
+            name: bill_name,
+            ementa: bill_ementa,
+            bill_text_link: file_path,
+            date: bill_date,
+            authors: a_list_json,
+            status: s_list_json,
+        })
+        #print bill 
+        bill.save!  
     end  
 end 
 
