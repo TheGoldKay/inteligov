@@ -15,3 +15,6 @@
 3.3 - find last index, that is, last item downlaod and asign it to the bill_index var
 3.4 - create a map // mapping bill_index to the next index need, as long as it was download it's green light
 3.5 - find a way to get the last page number (total number of pages)
+
+4 - db
+4.1 - work out migrations
