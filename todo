@@ -18,3 +18,6 @@
 
 4 - db
 4.1 - work out migrations
+
+5 - csv data 
+5.1 make a string with '\n' as separator out of each status and author list

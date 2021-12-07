@@ -26,7 +26,7 @@ def fetch_bill_codes
                 if arr[1] == 'materia' and arr[2] =~ /\d/ and arr.length() - arr.count("") == 2  then 
                     bill_number = arr[2]
                     all_bill_numbers << bill_number
-                    puts "\t\t\t\t\t\t\t\t\t Bill's Code: #{bill_number}"
+                    puts "\t\t\t\t\t\t\t\t\t Bill's Code #{page_index}*: #{bill_number}"
                 end 
             end 
             puts 

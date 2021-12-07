@@ -61,8 +61,17 @@ def download bill_url, url_site_base
     num_bills = Dir.glob(File.join("bills_json_data/", '**', '*')).select { |file| File.file?(file) }.count
     max_bill_index = File.open("data/total_number_of_bills.txt", "r").to_i
     while codes_left do 
+=begin
+        begin 
+            bill = Bill.new
+        rescue StandardError => e
+            puts e.inspect
+            puts e.message
+        end 
+=end 
         line = get_bill_index_code
         num, row = line["num"], line["row"]
+        #bill.code = num # code stands for the bill's numeric reference
         all_bill_numbers = get_bill_codes
         c = bill_count_on_off
         puts "\t\t\t\t\t|\t\t\t\t\t\t\t\t\t\t|"
@@ -71,15 +80,19 @@ def download bill_url, url_site_base
         url = bill_url + num.to_s.strip
         doc = Nokogiri::HTML(URI.open(url))
         bill_name = doc.search("h1").text.strip
+        #bill.name = bill_name # the bill's name
         bill_ementa = doc.at_css("div#div_id_ementa").text.strip
+        #bill.ementa = bill_ementa # the proposed bill's text
         ementa_arr = bill_ementa.split("\n")
         bill_ementa = ementa_arr[ementa_arr.length() - 1].strip
         bill_date = doc.at_css("div#div_id_data_apresentacao").text.strip
         data_arr = bill_date.split("\n")
         bill_date = data_arr[data_arr.length() - 1].strip
+        #bill.date = bill_date # date of the bill's release
         file_name = doc.at_css("div#div_id_texto_original").at_css('div').at_css('div').text
         file_path = doc.at_css("div#div_id_texto_original").at_css('div').at_css('div').at_css('a')['href']
-        file_path = url_site_base + file_path     
+        file_path = url_site_base + file_path   
+        #bill.bill_text_link = file_path # the link/url to download a .pdf/.odt of the bill's proposal  
         authors = Nokogiri::HTML(URI.open(url+"/autoria"))
         a_list = authors.css('tbody').css('td').css('a').map { |author| author.text.strip}
         bill_status = Nokogiri::HTML(URI.open(url + "/tramitacao"))
@@ -99,32 +112,23 @@ def download bill_url, url_site_base
             }
             status_json_lists.append(status_json)
         end 
-=begin
-        actual_bill = {
-            "id" => num,
-            "name" => bill_name,
-            "ementa" => bill_ementa,
-            "bill_text_link" => file_path,
-            "date" => bill_date,
-            "authors" => a_list,
-            "status" => status_json_lists
-        }
-        json_name = file_name.split(".")[0]
-        File.open("bills_json_data/" + json_name + ".json", "w") do |f|
-            f.write(actual_bill.to_json)
-        end 
-=end
         a_list_json = {}
         a_list.each_with_index do |val, index|
             a_list_json[index.to_s] = val 
         end 
+        #bill.authors = a_list_json # json containing all authors
         s_list_json = {}
         status_json_lists.each_with_index do |val, index|
             s_list_json[index.to_s] = val 
         end 
-        num_bills = Dir.glob(File.join("bills_json_data/", '**', '*')).select { |file| File.file?(file) }.count
+        #bill.status = s_list_json # json storing the time line of the bill's status
+        
+        #puts num, "\n", bill_name, "\n", bill_ementa, "\n", file_path, "\n", bill_date, "\n", a_list_json, "\n", s_list_json 
+        #bill = Bill.new 
+        #bill.code = code 
+=begin
         bill = Bill.new({
-            code: num,
+            code: num.to_i,
             name: bill_name,
             ementa: bill_ementa,
             bill_text_link: file_path,
@@ -132,27 +136,35 @@ def download bill_url, url_site_base
             authors: a_list_json,
             status: s_list_json,
         })
-        #print bill 
-        bill.save!  
+=end 
+        #print bill.code 
+        #bill.save!  
+        actual_bill = {
+            "id" => num,
+            "name" => bill_name,
+            "ementa" => bill_ementa,
+            "bill_text_link" => file_path,
+            "date" => bill_date,
+            "authors" => a_list_json,
+            "status" => s_list_json
+        }
+        json_name = file_name.split(".")[0]
+        File.open("scraper_data/" + json_name + ".json", "w") do |f|
+            f.write(actual_bill.to_json)
+        end
+        num_bills = Dir.glob(File.join("scraper_data/", '**', '*')).select { |file| File.file?(file) }.count
     end  
 end 
 
 def fetch_data
-    all_bill_numbers = get_bill_codes 
     begin 
+        puts "\t\t\tdownload...."
+        all_bill_numbers = get_bill_codes  
         url_site_base = "https://sapl.camaranh.rs.gov.br"
         bill_url = "https://sapl.camaranh.rs.gov.br/materia/" # number comes after '/materia/BILL_NUMBER'
         download bill_url, url_site_base
-    rescue => e
-        puts e.message 
-        puts e.backtrace 
-        number_of_bills = File.open("data/total_number_of_bills.txt", "r")
-        num_bills = Dir.glob(File.join("bills_json_data/", '**', '*')).select { |file| File.file?(file) }.count
-        if num_bills.to_i != number_of_bills.to_i then 
-            return fetch_data()
-        else 
-            return 
-        end 
+    rescue 
+        return fetch_data
     end 
 end 
 
